@@ -53,6 +53,48 @@ class Customer {
     return new Customer(customer);
   }
 
+  /** Get a list of the ten customers with the most reservations */
+
+  static async getBest() {
+    let customers = [];
+    
+    const results = await db.query(`
+      SELECT customers.id, count(*) 
+      FROM customers 
+      JOIN reservations 
+      ON customers.id = reservations.customer_id 
+      GROUP BY customers.id 
+      ORDER BY count DESC 
+      LIMIT 10;`
+    );
+    for (let result of results.rows) {
+      let customer = await this.get(result.id)
+      customers.push(customer);
+    }
+
+    return customers;
+  }
+
+  /** Get customer(s) by name */
+
+  static async searchByName(name) {
+    console.log("Fired off search by name function", name)
+    const results = await db.query(
+      `SELECT id, 
+        first_name AS "firstName", 
+        last_name AS "lastName", 
+        phone, 
+        notes
+      FROM customers
+      WHERE first_name || ' ' || last_name ILIKE $1`,
+      [`%${name}%`]
+    );
+    console.log("Search results:", results.rows)
+    return results.rows.map(c => new Customer(c));
+  }
+
+  /** Return fullname of the customer*/
+
   fullName(){
     return `${this.firstName} ${this.lastName}`;
   }

@@ -16,5 +16,13 @@
     "pg": "^7.18.2"
   },
   "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ulejnar/express-lunchly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ulejnar/express-lunchly/issues"
+  },
+  "homepage": "https://github.com/ulejnar/express-lunchly#readme",
   "description": ""
 }
